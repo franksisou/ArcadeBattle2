@@ -36,7 +36,6 @@ const Login = () => {
   };
 
   const handleGuestLogin = () => {
-    // Crear sesión de invitado
     const guestUser = {
       id: 'guest',
       username: 'Invitado',
@@ -46,20 +45,25 @@ const Login = () => {
     
     localStorage.setItem('user', JSON.stringify(guestUser));
     localStorage.setItem('token', 'guest-token');
+    
     navigate('/dashboard');
   };
 
   return (
     <div className="login-container">
       <div className="login-box">
+        {/* HEADER */}
         <div className="login-header">
           <h1>🎮 ArcadeBattle</h1>
           <p>Inicia sesión para continuar</p>
         </div>
 
+        {/* MENSAJE DE ERROR */}
         {error && <div className="error-message">{error}</div>}
 
+        {/* FORMULARIO DE LOGIN */}
         <form onSubmit={handleSubmit} className="login-form">
+          {/* Campo Email */}
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -74,6 +78,7 @@ const Login = () => {
             />
           </div>
 
+          {/* Campo Contraseña */}
           <div className="form-group">
             <label htmlFor="password">Contraseña</label>
             <input

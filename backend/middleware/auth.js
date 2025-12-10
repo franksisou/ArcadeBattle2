@@ -1,7 +1,5 @@
-// backend/middleware/auth.js
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-
 const authMiddleware = async (req, res, next) => {
   try {
     console.log('🔐 Middleware de autenticación iniciado');
@@ -28,7 +26,9 @@ const authMiddleware = async (req, res, next) => {
 
     req.user = user;
     console.log('✅ Autenticación exitosa, continuando...');
+    
     next();
+    
   } catch (error) {
     console.error('❌ Error en middleware de autenticación:', error.message);
     res.status(401).json({ error: 'Token inválido.' });

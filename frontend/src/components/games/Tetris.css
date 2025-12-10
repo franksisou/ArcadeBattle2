@@ -1,6 +1,5 @@
 .tetris-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
   padding: 20px;
 }
 

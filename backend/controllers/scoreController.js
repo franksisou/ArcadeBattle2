@@ -15,7 +15,7 @@ const scoreController = {
         return res.status(400).json({ error: 'Juego y puntuación son requeridos' });
       }
 
-      const validGames = ['snake', 'space-invaders', 'tetris', 'pong'];
+      const validGames = ['snake', 'space-invaders', 'tetris', 'pacman'];
       if (!validGames.includes(game)) {
         return res.status(400).json({ error: 'Juego no válido' });
       }
@@ -92,7 +92,7 @@ const scoreController = {
       const { game } = req.params;
       const limit = parseInt(req.query.limit) || 10;
 
-      const validGames = ['snake', 'space-invaders', 'tetris', 'pong'];
+      const validGames = ['snake', 'space-invaders', 'tetris', 'pacman'];
       if (!validGames.includes(game)) {
         return res.status(400).json({ error: 'Juego no válido' });
       }
@@ -137,7 +137,7 @@ const scoreController = {
       const { game } = req.params;
       const userId = req.user.id;
 
-      const validGames = ['snake', 'space-invaders', 'tetris', 'pong'];
+      const validGames = ['snake', 'space-invaders', 'tetris', 'pacman'];
       if (!validGames.includes(game)) {
         return res.status(400).json({ error: 'Juego no válido' });
       }

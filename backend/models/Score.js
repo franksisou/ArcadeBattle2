@@ -42,7 +42,7 @@ class Score {
       FROM scores s
       JOIN usuarios u ON s.user_id = u.id
       WHERE s.user_id = ? 
-      ORDER BY s.fecha_registro DESC 
+      ORDER BY s.played_at DESC 
       LIMIT 50
     `;
     
@@ -171,7 +171,7 @@ class Score {
         u.username
       FROM scores s
       JOIN usuarios u ON s.user_id = u.id
-      ORDER BY s.fecha_registro DESC
+      ORDER BY s.played_at DESC
       LIMIT ${limitInt}
     `;
     

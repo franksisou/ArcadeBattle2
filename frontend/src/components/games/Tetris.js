@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import scoreService from '../../services/scoreService';
 import achievementService from '../../services/achievementService';
 import AchievementNotification from '../AchievementNotification';
+import FloatingActionBar from '../FloatingActionBar';
+import RightActionBar from '../RightActionBar';
 import './Tetris.css';
 
 const ROWS = 20;
@@ -446,6 +448,8 @@ const Tetris = () => {
           }}
         />
       )}
+      <FloatingActionBar />
+      <RightActionBar />
     </div>
   );
 };

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 import scoreService from '../services/scoreService';
-import ThemeToggle from './ThemeToggle';
+import FloatingActionBar from './FloatingActionBar';
+import RightActionBar from './RightActionBar';
 import './Profile.css';
 
 const Profile = () => {
@@ -154,7 +155,7 @@ const Profile = () => {
       'snake': 'Snake',
       'space-invaders': 'Space Invaders',
       'tetris': 'Tetris',
-      'pong': 'Pong'
+      'pacman': 'Pac-Man'
     };
     return games[gameSlug] || gameSlug;
   };
@@ -358,7 +359,8 @@ const Profile = () => {
         </div>
       </div>
 
-      <ThemeToggle />
+      <FloatingActionBar />
+      <RightActionBar />
     </div>
   );
 };

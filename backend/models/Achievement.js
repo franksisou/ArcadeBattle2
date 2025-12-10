@@ -1,15 +1,12 @@
-// backend/models/Achievement.js
 const { pool } = require('../config/database');
 
 class Achievement {
-  // Obtener todos los logros disponibles
   static async getAllAchievements() {
     const query = 'SELECT * FROM achievements ORDER BY category, requirement_value ASC';
     const [rows] = await pool.query(query);
     return rows;
   }
 
-  // Obtener logros de un usuario específico
   static async getUserAchievements(userId) {
     const query = `
       SELECT 
@@ -25,7 +22,6 @@ class Achievement {
     return rows;
   }
 
-  // Desbloquear logro para un usuario
   static async unlockAchievement(userId, achievementId) {
     try {
       const query = `
@@ -41,12 +37,10 @@ class Achievement {
     }
   }
 
-  // Verificar y desbloquear logros después de una partida
   static async checkAndUnlockAchievements(userId, scoreData) {
     try {
       const newlyUnlocked = [];
       
-      // Obtener estadísticas del usuario
       const [userStats] = await pool.query(`
         SELECT 
           COUNT(*) as total_games,
@@ -59,11 +53,9 @@ class Achievement {
       
       const stats = userStats[0];
       
-      // Obtener puntuación actual del juego
       const currentGameScore = scoreData.score;
       const currentGame = scoreData.game;
       
-      // Obtener logros que aún no ha desbloqueado
       const [achievements] = await pool.query(`
         SELECT a.* 
         FROM achievements a
@@ -71,11 +63,9 @@ class Achievement {
         WHERE ua.id IS NULL
       `, [userId]);
       
-      // Verificar cada logro
       for (const achievement of achievements) {
         let shouldUnlock = false;
         
-        // Filtrar por juego si el logro es específico
         if (achievement.game && achievement.game !== currentGame) {
           continue;
         }
@@ -86,14 +76,12 @@ class Achievement {
             break;
             
           case 'single_score':
-            // Verificar si es del juego correcto o es general
             if (!achievement.game || achievement.game === currentGame) {
               shouldUnlock = currentGameScore >= achievement.requirement_value;
             }
             break;
             
           case 'total_games':
-            // Si es específico de un juego
             if (achievement.game) {
               const [gameStats] = await pool.query(
                 'SELECT COUNT(*) as count FROM scores WHERE user_id = ? AND game = ?',
@@ -101,9 +89,12 @@ class Achievement {
               );
               shouldUnlock = gameStats[0].count >= achievement.requirement_value;
             } else {
-              // Logro general de partidas
               shouldUnlock = stats.total_games >= achievement.requirement_value;
             }
+            break;
+            
+          case 'unique_games':
+            shouldUnlock = stats.different_games >= achievement.requirement_value;
             break;
         }
         
@@ -114,13 +105,13 @@ class Achievement {
       }
       
       return newlyUnlocked;
+      
     } catch (error) {
       console.error('Error verificando logros:', error);
       return [];
     }
   }
 
-  // Obtener estadísticas de logros del usuario
   static async getUserAchievementStats(userId) {
     const [stats] = await pool.query(`
       SELECT 
@@ -135,7 +126,6 @@ class Achievement {
     return stats[0];
   }
 
-  // Obtener logros recientes del usuario
   static async getRecentAchievements(userId, limit = 5) {
     const query = `
       SELECT a.*, ua.unlocked_at

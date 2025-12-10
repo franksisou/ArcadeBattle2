@@ -1,0 +1,344 @@
+.pacman-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  color: white;
+}
+
+.pacman-header {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.pacman-header h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: #FFFF00;
+  text-shadow: 0 0 10px #FFFF00;
+}
+
+.pacman-stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: 2px solid #FFFF00;
+}
+
+.btn-back {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid white;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+  background: white;
+  color: black;
+  transform: translateY(-2px);
+}
+
+.pacman-game-area {
+  position: relative;
+  margin: 20px 0;
+  box-shadow: 0 0 30px rgba(255, 255, 0, 0.3);
+}
+
+.pacman-grid {
+  position: relative;
+  background: #000000;
+  border: 4px solid #2121DE;
+  box-sizing: content-box;
+  box-shadow: 
+    0 0 20px rgba(33, 33, 222, 0.5),
+    inset 0 0 30px rgba(33, 33, 222, 0.2);
+}
+
+.cell {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.cell.wall {
+  background: #2121DE;
+  border: 1px solid #4848FF;
+  box-shadow: inset 0 0 3px rgba(72, 72, 255, 0.5);
+}
+
+.cell.ghost-house {
+  background: #1a1a1a;
+  border: 1px solid #FF1493;
+}
+
+.dot {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #FFB8AE;
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(255, 184, 174, 0.6);
+}
+.power-dot {
+  width: 8px;
+  height: 8px;
+  background: #FFB8AE;
+  animation: pulse 0.4s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(255, 184, 174, 0.8);
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(255, 184, 174, 0.8);
+  }
+  50% { 
+    transform: scale(1.3); 
+    opacity: 0.7;
+    box-shadow: 0 0 15px rgba(255, 184, 174, 1);
+  }
+}
+
+.pacman {
+  position: absolute;
+  background: #FFFF00;
+  border-radius: 50%;
+  transition: all 0.08s linear;
+  z-index: 10;
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+}
+
+.pacman.mouth-open {
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+}
+
+.pacman.mouth-closed {
+  clip-path: polygon(100% 50%, 0 15%, 0 85%);
+}
+
+.pacman.invincible {
+  animation: flash 0.2s infinite;
+}
+
+@keyframes flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.ghost {
+  position: absolute;
+  border-radius: 50% 50% 0 0;
+  transition: all 0.1s linear;
+  z-index: 9;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.ghost::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: inherit;
+  clip-path: polygon(0 0, 20% 100%, 40% 0, 60% 100%, 80% 0, 100% 100%, 100% 0);
+}
+
+.ghost-eyes {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30%;
+  width: 70%;
+  z-index: 10;
+}
+
+.ghost-eye {
+  width: 30%;
+  height: 40%;
+  background: white;
+  border-radius: 50%;
+  position: relative;
+}
+
+.ghost-eye::after {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background: #000;
+  border-radius: 50%;
+  top: 25%;
+  left: 25%;
+}
+
+.ghost.frightened {
+  background: #2121DE !important;
+  animation: shake 0.15s infinite;
+}
+
+.ghost.frightened::after {
+  background: #2121DE !important;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-1px); }
+  75% { transform: translateX(1px); }
+}
+
+.pacman-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.pacman-message {
+  background: #1a1a1a;
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  border: 3px solid #FFFF00;
+  box-shadow: 0 0 30px rgba(255, 255, 0, 0.5);
+}
+
+.pacman-message h2 {
+  font-size: 2.5rem;
+  margin: 0 0 20px 0;
+  color: #FFFF00;
+  text-shadow: 0 0 10px #FFFF00;
+}
+
+.pacman-message p {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.high-score-text {
+  color: #FFD700;
+  font-weight: bold;
+  font-size: 1.5rem !important;
+  animation: flashScore 1s infinite;
+}
+
+@keyframes flashScore {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.game-over-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-restart,
+.btn-menu {
+  padding: 15px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-restart {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-restart:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.btn-menu {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 2px solid white;
+}
+
+.btn-menu:hover {
+  background: white;
+  color: black;
+  transform: translateY(-3px);
+}
+
+.pacman-controls {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pacman-controls p {
+  margin-bottom: 10px;
+  color: #FFFF00;
+}
+
+.btn-pause {
+  background: rgba(255, 255, 0, 0.2);
+  border: 2px solid #FFFF00;
+  color: #FFFF00;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-pause:hover {
+  background: #FFFF00;
+  color: black;
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .pacman-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .pacman-stats {
+    justify-content: center;
+  }
+
+  .pacman-message {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .pacman-message h2 {
+    font-size: 2rem;
+  }
+}

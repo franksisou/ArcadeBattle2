@@ -98,6 +98,14 @@ INSERT INTO achievements (name, description, icon, category, rarity, points, gam
 ('Arquitecto Perfecto', 'Alcanza 3000 puntos en Tetris', '🏗️', 'score', 'epic', 50, 'tetris', 'single_score', 3000),
 ('Dios del Tetris', 'Alcanza 6000 puntos en Tetris', '💎', 'score', 'legendary', 100, 'tetris', 'single_score', 6000);
 
+-- Logros de Pac-Man (Common)
+INSERT INTO achievements (name, description, icon, category, rarity, points, game, requirement_type, requirement_value) VALUES
+('Primera Cacería', 'Juega tu primera partida de Pac-Man', '🟡', 'games', 'common', 5, 'pacman', 'total_games', 1),
+('Comedor de Puntos', 'Alcanza 500 puntos en Pac-Man', '🔴', 'score', 'common', 10, 'pacman', 'single_score', 500),
+('Cazafantasmas', 'Alcanza 2000 puntos en Pac-Man', '👻', 'score', 'rare', 25, 'pacman', 'single_score', 2000),
+('Maestro del Laberinto', 'Alcanza 5000 puntos en Pac-Man', '🏅', 'score', 'epic', 50, 'pacman', 'single_score', 5000),
+('Rey del Pac-Man', 'Alcanza 10000 puntos en Pac-Man', '👑', 'score', 'legendary', 100, 'pacman', 'single_score', 10000);
+
 -- Logros Generales
 INSERT INTO achievements (name, description, icon, category, rarity, points, game, requirement_type, requirement_value) VALUES
 ('Jugador Dedicado', 'Juega 10 partidas en total', '🎲', 'games', 'common', 15, NULL, 'total_games', 10),
@@ -106,7 +114,7 @@ INSERT INTO achievements (name, description, icon, category, rarity, points, gam
 ('Cazador de Puntos', 'Acumula 5000 puntos en total', '💯', 'score', 'rare', 20, NULL, 'total_score', 5000),
 ('Coleccionista de Victorias', 'Acumula 10000 puntos en total', '🎖️', 'score', 'epic', 50, NULL, 'total_score', 10000),
 ('Leyenda del Arcade', 'Acumula 50000 puntos en total', '👑', 'special', 'legendary', 100, NULL, 'total_score', 50000),
-('Explorador de Juegos', 'Juega los 3 juegos diferentes', '🌟', 'special', 'common', 15, NULL, 'total_games', 3);
+('Explorador de Juegos', 'Juega los 4 juegos diferentes', '🌟', 'special', 'common', 15, NULL, 'unique_games', 4);
 
 -- ============================================
 -- ÍNDICES ADICIONALES PARA OPTIMIZACIÓN

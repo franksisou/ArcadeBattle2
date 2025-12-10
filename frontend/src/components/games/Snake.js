@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import scoreService from '../../services/scoreService';
 import achievementService from '../../services/achievementService';
 import AchievementNotification from '../AchievementNotification';
+import FloatingActionBar from '../FloatingActionBar';
+import RightActionBar from '../RightActionBar';
 import './Snake.css';
 
 const GRID_SIZE = 20;
@@ -318,6 +320,8 @@ const Snake = () => {
           }}
         />
       )}
+      <FloatingActionBar />
+      <RightActionBar />
     </div>
   );
 };

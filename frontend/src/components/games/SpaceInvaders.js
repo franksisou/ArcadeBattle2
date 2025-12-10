@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import scoreService from '../../services/scoreService';
 import achievementService from '../../services/achievementService';
 import AchievementNotification from '../AchievementNotification';
+import FloatingActionBar from '../FloatingActionBar';
+import RightActionBar from '../RightActionBar';
 import './SpaceInvaders.css';
 
 const CANVAS_WIDTH = 600;
@@ -462,6 +464,8 @@ const SpaceInvaders = () => {
           }}
         />
       )}
+      <FloatingActionBar />
+      <RightActionBar />
     </div>
   );
 };

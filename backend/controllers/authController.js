@@ -1,14 +1,11 @@
-// backend/controllers/authController.js
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 const authController = {
-  // REGISTRO DE USUARIO
   async register(req, res) {
     try {
       const { email, password, username } = req.body;
 
-      // Validaciones básicas
       if (!email || !password) {
         return res.status(400).json({ error: 'Email y contraseña son requeridos' });
       }
@@ -17,23 +14,19 @@ const authController = {
         return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
       }
 
-      // Verificar si el usuario ya existe
       const existingUser = await User.findByEmail(email);
       if (existingUser) {
         return res.status(400).json({ error: 'El email ya está registrado' });
       }
 
-      // Crear usuario
       const userId = await User.create({ email, password, username });
       
-      // Generar token JWT
       const token = jwt.sign(
-        { userId: userId }, 
-        process.env.JWT_SECRET, 
+        { userId: userId },
+        process.env.JWT_SECRET,
         { expiresIn: '7d' }
       );
 
-      // Actualizar última sesión
       await User.updateLastSession(userId);
 
       res.status(201).json({
@@ -52,36 +45,30 @@ const authController = {
     }
   },
 
-  // LOGIN DE USUARIO
   async login(req, res) {
     try {
       const { email, password } = req.body;
 
-      // Validaciones
       if (!email || !password) {
         return res.status(400).json({ error: 'Email y contraseña son requeridos' });
       }
 
-      // Buscar usuario
       const user = await User.findByEmail(email);
       if (!user) {
         return res.status(400).json({ error: 'Credenciales inválidas' });
       }
 
-      // Verificar contraseña
       const isPasswordValid = await User.verifyPassword(password, user.password);
       if (!isPasswordValid) {
         return res.status(400).json({ error: 'Credenciales inválidas' });
       }
 
-      // Generar token JWT
       const token = jwt.sign(
-        { userId: user.id }, 
-        process.env.JWT_SECRET, 
+        { userId: user.id },
+        process.env.JWT_SECRET,
         { expiresIn: '7d' }
       );
 
-      // Actualizar última sesión
       await User.updateLastSession(user.id);
 
       res.json({
@@ -100,7 +87,6 @@ const authController = {
     }
   },
 
-  // OBTENER PERFIL DE USUARIO (ruta protegida)
   async getProfile(req, res) {
     try {
       res.json({
@@ -112,13 +98,11 @@ const authController = {
     }
   },
 
-  // ACTUALIZAR PERFIL DE USUARIO
   async updateProfile(req, res) {
     try {
       const userId = req.user.id;
       const { username, email, currentPassword, newPassword } = req.body;
 
-      // Si se intenta cambiar la contraseña, validar la actual
       if (newPassword) {
         if (!currentPassword) {
           return res.status(400).json({ 
@@ -127,8 +111,8 @@ const authController = {
         }
 
         const user = await User.findById(userId);
-        const isPasswordValid = await User.verifyPassword(currentPassword, user.password);
         
+        const isPasswordValid = await User.verifyPassword(currentPassword, user.password);
         if (!isPasswordValid) {
           return res.status(400).json({ error: 'Contraseña actual incorrecta' });
         }
@@ -140,7 +124,6 @@ const authController = {
         }
       }
 
-      // Verificar si el email ya existe (si se está cambiando)
       if (email && email !== req.user.email) {
         const existingUser = await User.findByEmail(email);
         if (existingUser) {
@@ -148,14 +131,12 @@ const authController = {
         }
       }
 
-      // Actualizar usuario
       await User.updateProfile(userId, {
         username,
         email,
         newPassword
       });
 
-      // Obtener usuario actualizado
       const updatedUser = await User.findById(userId);
 
       res.json({
@@ -175,15 +156,12 @@ const authController = {
     }
   },
 
-  // ELIMINAR CUENTA
   async deleteAccount(req, res) {
     try {
       const userId = req.user.id;
 
-      // Eliminar todas las puntuaciones del usuario
       await User.deleteUserScores(userId);
 
-      // Eliminar usuario
       await User.deleteAccount(userId);
 
       res.json({

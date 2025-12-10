@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import achievementService from '../services/achievementService';
 import authService from '../services/authService';
-import ThemeToggle from './ThemeToggle';
+import FloatingActionBar from './FloatingActionBar';
+import RightActionBar from './RightActionBar';
 import './Achievements.css';
 
 function Achievements() {
@@ -81,7 +82,8 @@ function Achievements() {
   if (loading) {
     return (
       <div className="achievements-container">
-        <ThemeToggle />
+        <FloatingActionBar />
+        <RightActionBar />
         <div className="loading">Cargando logros...</div>
       </div>
     );
@@ -90,7 +92,8 @@ function Achievements() {
   if (isGuest) {
     return (
       <div className="achievements-container">
-        <ThemeToggle />
+        <FloatingActionBar />
+        <RightActionBar />
         <div className="achievements-header">
           <h1>🏆 Logros</h1>
           <button onClick={() => navigate('/dashboard')} className="btn-back">
@@ -110,7 +113,8 @@ function Achievements() {
 
   return (
     <div className="achievements-container">
-      <ThemeToggle />
+      <FloatingActionBar />
+      <RightActionBar />
       
       <div className="achievements-header">
         <h1>🏆 Logros de {currentUser?.username}</h1>

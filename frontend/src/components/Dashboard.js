@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 import scoreService from '../services/scoreService';
-import ThemeToggle from './ThemeToggle';
+import FloatingActionBar from './FloatingActionBar';
+import RightActionBar from './RightActionBar';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -10,7 +11,29 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const navigate = useNavigate();
+
+  const allGames = [
+    { id: 'snake', name: 'Snake Battle', icon: '🐍', category: 'arcade', description: 'Come y crece' },
+    { id: 'space-invaders', name: 'Space Invaders', icon: '👾', category: 'shooter', description: 'Defiende la Tierra' },
+    { id: 'tetris', name: 'Tetris', icon: '🎲', category: 'puzzle', description: 'Completa líneas' },
+    { id: 'pacman', name: 'Pac-Man', icon: '🟡', category: 'arcade', description: 'Come puntos y huye de los fantasmas' }
+  ];
+
+  const categories = [
+    { id: 'all', name: 'Todos' },
+    { id: 'arcade', name: 'Arcade' },
+    { id: 'shooter', name: 'Disparos' },
+    { id: 'puzzle', name: 'Puzzle' }
+  ];
+
+  const filteredGames = allGames.filter(game => {
+    const matchesSearch = game.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || game.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   useEffect(() => {
     // Verificar si el usuario está autenticado
@@ -132,40 +155,43 @@ const Dashboard = () => {
 
         <section className="games-section">
           <h2>Juegos Disponibles</h2>
+          
+          <div className="games-filter">
+            <input
+              type="text"
+              placeholder="🔍 Buscar juegos..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            <div className="category-filters">
+              {categories.map(cat => (
+                <button
+                  key={cat.id}
+                  className={`category-btn ${selectedCategory === cat.id ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory(cat.id)}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="games-grid">
-            <div className="game-card">
-              <div className="game-icon">🐍</div>
-              <h3>Snake Battle</h3>
-              <p>Clásico juego de serpiente - ¡Come y crece!</p>
-              <button className="btn-play" onClick={() => navigate('/games/snake')}>
-                ▶ Jugar Ahora
-              </button>
-            </div>
-
-            <div className="game-card">
-              <div className="game-icon">👾</div>
-              <h3>Space Invaders</h3>
-              <p>Defiende la Tierra de la invasión alienígena</p>
-              <button className="btn-play" onClick={() => navigate('/games/space-invaders')}>
-                ▶ Jugar Ahora
-              </button>
-            </div>
-
-            <div className="game-card">
-              <div className="game-icon">🎲</div>
-              <h3>Tetris</h3>
-              <p>Apila bloques y completa líneas</p>
-              <button className="btn-play" onClick={() => navigate('/games/tetris')}>
-                ▶ Jugar Ahora
-              </button>
-            </div>
-
-            <div className="game-card">
-              <div className="game-icon">🏓</div>
-              <h3>Pong Battle</h3>
-              <p>Desafía a otros jugadores en tiempo real</p>
-              <button className="btn-play" disabled>Próximamente</button>
-            </div>
+            {filteredGames.length > 0 ? (
+              filteredGames.map(game => (
+                <div key={game.id} className="game-card">
+                  <div className="game-icon">{game.icon}</div>
+                  <h3>{game.name}</h3>
+                  <p>{game.description}</p>
+                  <button className="btn-play" onClick={() => navigate(`/games/${game.id}`)}>
+                    ▶ Jugar Ahora
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p className="no-games">No se encontraron juegos</p>
+            )}
           </div>
         </section>
 
@@ -204,7 +230,8 @@ const Dashboard = () => {
         <p>&copy; 2025 ArcadeBattle. Todos los derechos reservados.</p>
       </footer>
 
-      <ThemeToggle />
+      <FloatingActionBar />
+      <RightActionBar />
     </div>
   );
 };
