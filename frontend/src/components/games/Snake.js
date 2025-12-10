@@ -26,6 +26,7 @@ const Snake = () => {
   const navigate = useNavigate();
   const directionRef = useRef(direction);
   const scoreRef = useRef(0);
+  const gameOverProcessedRef = useRef(false);
 
   // Actualizar scoreRef cuando cambie score
   useEffect(() => {
@@ -76,33 +77,36 @@ const Snake = () => {
           localStorage.setItem('snakeHighScore', finalScore.toString());
         }
         
-        // Guardar puntuación solo si no es invitado
-        const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-        if (!currentUser.isGuest) {
-          console.log('🐍 Game Over! Guardando puntuación:', finalScore);
-          const scoreData = {
-            game: 'snake',
-            score: finalScore,
-            level: 1,
-            metadata: { snakeLength: prevSnake.length }
-          };
-          
-          scoreService.saveScore(scoreData)
-            .then(() => {
-              console.log('✅ Puntuación de Snake guardada exitosamente');
-              // Verificar logros
-              return achievementService.checkAchievements(scoreData);
-            })
-            .then((response) => {
-              if (response && response.newAchievements && response.newAchievements.length > 0) {
-                console.log('🏆 Nuevos logros desbloqueados:', response.newAchievements);
-                setNewAchievements(response.newAchievements);
-                setCurrentNotification(response.newAchievements[0]);
-              }
-            })
-            .catch(err => {
-              console.error('❌ Error:', err);
-            });
+        // Guardar puntuación solo si no es invitado y no se ha procesado ya
+        if (!gameOverProcessedRef.current) {
+          gameOverProcessedRef.current = true;
+          const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+          if (!currentUser.isGuest) {
+            console.log('🐍 Game Over! Guardando puntuación:', finalScore);
+            const scoreData = {
+              game: 'snake',
+              score: finalScore,
+              level: 1,
+              metadata: { snakeLength: prevSnake.length }
+            };
+            
+            scoreService.saveScore(scoreData)
+              .then(() => {
+                console.log('✅ Puntuación de Snake guardada exitosamente');
+                // Verificar logros
+                return achievementService.checkAchievements(scoreData);
+              })
+              .then((response) => {
+                if (response && response.newAchievements && response.newAchievements.length > 0) {
+                  console.log('🏆 Nuevos logros desbloqueados:', response.newAchievements);
+                  setNewAchievements(response.newAchievements);
+                  setCurrentNotification(response.newAchievements[0]);
+                }
+              })
+              .catch(err => {
+                console.error('❌ Error:', err);
+              });
+          }
         }
         return prevSnake;
       }
@@ -173,6 +177,7 @@ const Snake = () => {
     setScore(0);
     setGameOver(false);
     setIsPaused(false);
+    gameOverProcessedRef.current = false; // Resetear la bandera
   };
 
   // Efectos

@@ -334,11 +334,11 @@ const Profile = () => {
                 </thead>
                 <tbody>
                   {userScores.slice(0, 10).map((score, index) => (
-                    <tr key={index}>
+                    <tr key={score.id}>
                       <td>{getGameName(score.game)}</td>
                       <td className="score-value">{score.score}</td>
                       <td>{score.level}</td>
-                      <td>{new Date(score.fecha_registro).toLocaleDateString()}</td>
+                      <td>{new Date(score.played_at).toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>

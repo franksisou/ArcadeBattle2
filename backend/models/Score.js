@@ -58,7 +58,7 @@ class Score {
       SELECT 
         s.score, 
         s.level, 
-        s.fecha_registro,
+        s.played_at,
         u.username,
         u.id as user_id
       FROM scores s
